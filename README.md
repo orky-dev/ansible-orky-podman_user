@@ -9,14 +9,14 @@ podman_group: "{{ podman_user }}"
 
 ## Usage
 
-1. Add to your `requirements.yml`
+1. Add to your `requirements.yml`, latest version is published as `tag` like `v0.1.1`
 
     ```yaml
     ---
     roles:
       - name: orky.podman_user
         src: ssh://git@github.com/orky-dev/ansible-orky-podman_user.git
-        version: main
+        version: v0.1.1
         scm: git
     ```
 
