@@ -1,0 +1,5 @@
+---
+- name: reset_connection
+  meta: reset_connection
+# I always forget bout this, so this is the comment to the future me
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/meta_module.html
