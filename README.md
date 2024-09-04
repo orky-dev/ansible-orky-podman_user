@@ -57,8 +57,20 @@ podman_group: "{{ podman_user }}"
     ansible-playbook -i inventory.yml playbook.yml
     ```
 
+### TODO:
+1. Is this overlapping or not?
+    ```bash
+    cat /etc/subgid
+    992:65208320:65536
+    991:65142784:65536
+    ```
+    Have check corner case, is it overlapping or not? 
+    I don't get it yet.
+    ` 65208320 - 65536 = 65142784`
+    Possible fix: 65536 - 1 = 65535.
+
 ### Notes to the future me when I come back to this role once againg with comments like "Who did this shit":
 1. Look there about meta_module
 https://docs.ansible.com/ansible/latest/collections/ansible/builtin/meta_module.html
 2. Remember that Debian 12 by default have only Podman 4.3 and Podmans Quadlets available from 4.4+
-3. Write podman_systemd role!
+3. Quadlet is an another asbtraction on systemd that doesn't make anything better. Also it is not properly documented.

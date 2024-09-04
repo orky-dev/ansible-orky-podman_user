@@ -32,11 +32,34 @@
     podman_user_uid: "{{ user.uid }}"
     podman_user_gid: "{{ group.gid }}"
 
+- name: Create subuid using uid and bitwise shift left
+  ansible.builtin.shell:
+    cmd: "echo $(( {{ podman_user_uid }} << 16))"
+  register: bit_shift_left
+
+- name: Display output of {{ bit_shift_left }}
+  ansible.builtin.debug:
+    var: bit_shift_left.stdout
+
+- name: Set {{ podman_user }} bit_shift_left fact
+  ansible.builtin.set_fact:
+    podman_user_uid_bit_shift_left: "{{ bit_shift_left.stdout }}"
+
+# 2 to the power of 16 = 65536
+# thats why subuid zones will not overlap each over
+
+#cat /etc/subgid
+#992:65208320:65536
+#991:65142784:65536
+# Have check corner case, is it overlapping or not? 
+# I don't get it yet.
+# 65208320 - 65536 = 65142784
+
 - name: Add {{ podman_user }} user to subuid file
   ansible.builtin.lineinfile:
     path: /etc/subuid
-    regexp: "^{{ podman_user }}:.*"
-    line: "{{ podman_user }}:165536:65536"
+    regexp: "^{{ podman_user_uid }}:.*"
+    line: "{{ podman_user_uid }}:{{ podman_user_uid_bit_shift_left }}:65536"
     create: true
     mode: '0644'
     owner: root
@@ -45,8 +68,8 @@
 - name: Add {{ podman_group }} group to subgid file
   ansible.builtin.lineinfile:
     path: /etc/subgid
-    regexp: "^{{ podman_group }}:.*"
-    line: "{{ podman_group }}:165536:65536"
+    regexp: "^{{ podman_user_gid }}:.*"
+    line: "{{ podman_user_gid }}:{{ podman_user_uid_bit_shift_left }}:65536"
     create: true
     mode: '0644'
     owner: root
