@@ -1,2 +1,3 @@
 ---
 podman_group: "{{ podman_user }}"
+uid_gid_counts: 65536

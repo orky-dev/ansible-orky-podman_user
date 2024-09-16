@@ -1,5 +1,7 @@
-
 A simple Ansible role to create user for running Podman rootless containers.
+
+This role using the same subordinate id ranges as FreeIPA.
+https://freeipa.readthedocs.io/en/latest/designs/subordinate-ids.html#revision-1-limitation
 
 ## Vars
 ```yaml
@@ -9,14 +11,14 @@ podman_group: "{{ podman_user }}"
 
 ## Usage
 
-1. Add to your `requirements.yml`, latest version is published as `tag` like `v0.1.1`
+1. Add to your `requirements.yml`, latest version is published as `tag` like `v0.3.1`
 
     ```yaml
     ---
     roles:
       - name: orky.podman_user
         src: ssh://git@github.com/orky-dev/ansible-orky-podman_user.git
-        version: v0.1.1
+        version: v0.3.1
         scm: git
     ```
 
@@ -58,19 +60,6 @@ podman_group: "{{ podman_user }}"
     ```
 
 ### TODO:
-1. Is this overlapping or not?
-    ```bash
-    cat /etc/subgid
-    992:65208320:65536
-    991:65142784:65536
-    ```
-    Have check corner case, is it overlapping or not? 
-    I don't get it yet.
-    ` 65208320 - 65536 = 65142784`
-    Possible fix: 65536 - 1 = 65535.
-
-### Notes to the future me when I come back to this role once againg with comments like "Who did this shit":
-1. Look there about meta_module
-https://docs.ansible.com/ansible/latest/collections/ansible/builtin/meta_module.html
-2. Remember that Debian 12 by default have only Podman 4.3 and Podmans Quadlets available from 4.4+
-3. Quadlet is an another asbtraction on systemd that doesn't make anything better. Also it is not properly documented.
+1. ~~Rewrite generation of subuid/subgid~~
+2. Python code to test all subuid/subgid ranges for overlapping. 
+3. Add generation of subuids for more than one user (you can run the role for every user but it is going to be ineffective for a lot of users, might be the problems at hundreds of thousands, but it is okay for tens)
