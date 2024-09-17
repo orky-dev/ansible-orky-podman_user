@@ -1,7 +1,6 @@
 A simple Ansible role to create user for running Podman rootless containers.
 
-This role using the same subordinate id ranges as FreeIPA.
-https://freeipa.readthedocs.io/en/latest/designs/subordinate-ids.html#revision-1-limitation
+This role using the same subordinate id ranges as [FreeIPA](https://freeipa.readthedocs.io/en/latest/designs/subordinate-ids.html#revision-1-limitation).
 
 ## Vars
 ```yaml
@@ -10,8 +9,14 @@ podman_group: "{{ podman_user }}"
 ```
 
 ## Usage
+1. Create 3 .yml files
+    ```bash
+    ├── inventory.yml
+    ├── playbook.yml
+    └── requirements.yml
+    ```
 
-1. Add to your `requirements.yml`, latest version is published as `tag` like `v0.3.1`
+2. Add to `requirements.yml`
 
     ```yaml
     ---
@@ -22,13 +27,13 @@ podman_group: "{{ podman_user }}"
         scm: git
     ```
 
-2. Install the role
+3. Install the role
 
     ```yaml
     ansible-galaxy install -r requirements.yml
     ```
 
-3. Then create the similar `playbook.yml`
+4. Add to `playbook.yml`
 
     ```yaml
     - hosts: podman_servers
@@ -37,7 +42,7 @@ podman_group: "{{ podman_user }}"
           podman_user: kek
           become: yes
     ```
-4. Also don't forget about `inventory.yml`
+5. Update `inventory.yml` using your credentials and hosts
 
     ```yaml
     ---
@@ -47,14 +52,8 @@ podman_group: "{{ podman_user }}"
           ansible_host: x.x.x.x
           ansible_user: root
     ```
-5. Your project directory gonna look like this
-    ```bash
-    ├── inventory.yml
-    ├── playbook.yml
-    └── requirements.yml
-    ```
 
-6. Run  playbook as simple as
+6. Run playbook
     ```yaml
     ansible-playbook -i inventory.yml playbook.yml
     ```
@@ -62,4 +61,5 @@ podman_group: "{{ podman_user }}"
 ### TODO:
 1. ~~Rewrite generation of subuid/subgid~~
 2. Python code to test all subuid/subgid ranges for overlapping. 
-3. Add generation of subuids for more than one user (you can run the role for every user but it is going to be ineffective for a lot of users, might be the problems at hundreds of thousands, but it is okay for tens)
+3. Add generation of subuids for more than one user. Ofc you can run the role in for-loop but it is going to be ineffective for a lot of users, might be the problem at thousands, but it is okay for tens or hundreds.
+4. Add CI and simple role tests.
