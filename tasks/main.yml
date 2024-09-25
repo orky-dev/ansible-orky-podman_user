@@ -42,7 +42,7 @@
   ansible.builtin.lineinfile:
     path: /etc/subuid
     regexp: "^{{ podman_user_uid }}:.*"
-    line: "{{ podman_user_uid }}:{{ podman_user_uid_start_range }}:{{ uid_gid_counts }}"
+    line: "{{ podman_user }}:{{ podman_user_uid_start_range }}:{{ uid_gid_counts }}"
     create: true
     mode: '0644'
     owner: root
@@ -52,7 +52,7 @@
   ansible.builtin.lineinfile:
     path: /etc/subgid
     regexp: "^{{ podman_user_gid }}:.*"
-    line: "{{ podman_user_gid }}:{{ podman_user_uid_start_range }}:{{ uid_gid_counts }}"
+    line: "{{ podman_user }}:{{ podman_user_uid_start_range }}:{{ uid_gid_counts }}"
     create: true
     mode: '0644'
     owner: root
